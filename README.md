@@ -1,4 +1,4 @@
-# Sharex-File-uploader
+# Sharex-File-Uploader
 
 Nodejs server to upload file to your personnal server using sharex custom upload.
 

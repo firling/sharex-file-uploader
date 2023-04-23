@@ -1,10 +1,10 @@
 const postFile = (req, res) => {
 
-    console.log(req.filename);
-
     var url = "";
     if (req.body.secret != process.env.SECRET) url = "wrong secret";
-    else url = `${process.env.HOSTNAME}/static/${req.filename}`;
+    else url = `${process.env.URL}/static/${req.filename}`;
+
+    console.log(url);
 
     return res.status(200).json({
         success: true,

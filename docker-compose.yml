@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+
+  sharex:
+    container_name: sharex
+    build:
+      context: .
+    volumes:
+      - ./files:/app/files
+    networks:
+      - traefik
+    environment:
+      - PORT=80
+    labels:
+      - "traefik.enable=true"
+
+      - "traefik.http.services.sharex.loadbalancer.server.port=80"
+
+      - "traefik.http.routers.sharex.entrypoints=websecure"
+      - "traefik.http.routers.sharex.rule=Host(`screenshot.anquetil.org`)"
+      - "traefik.http.routers.sharex.tls=true"
+      - "traefik.http.routers.sharex.tls.certresolver=letsencrypt"
+
+
+networks:
+  traefik:
+    external: true

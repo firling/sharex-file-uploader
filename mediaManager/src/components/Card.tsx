@@ -2,6 +2,8 @@ import {Paper, Text, ActionIcon} from '@mantine/core';
 import { IconTrash, IconFileFilled } from '@tabler/icons-react';
 // @ts-ignore
 import VideoThumbnail from 'react-video-thumbnail';
+// @ts-ignore
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 
 interface CardProps {
     file: string,
@@ -54,7 +56,12 @@ const Card = ({file, onDelete}: CardProps) => {
                 }}
                 onClick={() => window.open(url)}
             >
-                {getType(file) === 'image' ? <img src={url} alt={file}/> 
+                {getType(file) === 'image' ? 
+                    <LazyLoadImage
+                        alt={file}
+                        effect="blur"
+                        src={url} 
+                    />
                 : getType(file) === 'video' ? <VideoThumbnail videoUrl={url} /> : <IconFileFilled size="5rem" />}
             </div>
         </Paper>

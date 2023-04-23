@@ -1,5 +1,6 @@
 import {Paper, Text, ActionIcon} from '@mantine/core';
 import { IconTrash, IconFileFilled } from '@tabler/icons-react';
+// @ts-ignore
 import VideoThumbnail from 'react-video-thumbnail';
 
 interface CardProps {

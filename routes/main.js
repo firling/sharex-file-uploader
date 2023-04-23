@@ -15,6 +15,6 @@ const upload = multer({ storage })
 const { postFile, getAllFile, deleteFile } = require("../controllers/main");
 router.post('/postFile', upload.single('sharex'), postFile);
 router.get('/getAllFile', getAllFile)
-router.delete('/deleteFile', deleteFile)
+router.delete('/deleteFile/:filename', deleteFile)
 
 module.exports = router;

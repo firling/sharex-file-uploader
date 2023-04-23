@@ -22,7 +22,7 @@ const getAllFile = (req, res) => {
 }
 
 const deleteFile = (req, res) => {
-    fs.unlink(`./files/${req.body.filename}`, (err) => {
+    fs.unlink(`./files/${req.params.filename}`, (err) => {
         if (err) return res.status(500).json({ success: false, error: err });
         return res.status(200).json({ success: true });
     });

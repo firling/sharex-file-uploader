@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const postFile = (req, res) => {
 
     var url = "";
@@ -12,6 +14,20 @@ const postFile = (req, res) => {
     });
 }
 
+const getAllFile = (req, res) => {
+    fs.readdir('./files', (err, files) => {
+        if (err) return res.status(500).json({ success: false, error: err });
+        return res.status(200).json({ success: true, files });
+    });
+}
+
+const deleteFile = (req, res) => {
+    fs.unlink(`./files/${req.body.filename}`, (err) => {
+        if (err) return res.status(500).json({ success: false, error: err });
+        return res.status(200).json({ success: true });
+    });
+}
+
 module.exports = {
-    postFile,
+    postFile, getAllFile, deleteFile
 }

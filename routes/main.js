@@ -12,7 +12,9 @@ var storage = multer.diskStorage({
 });
 const upload = multer({ storage })
 
-const { postFile } = require("../controllers/main");
+const { postFile, getAllFile, deleteFile } = require("../controllers/main");
 router.post('/postFile', upload.single('sharex'), postFile);
+router.get('/getAllFile', getAllFile)
+router.delete('/deleteFile', deleteFile)
 
 module.exports = router;

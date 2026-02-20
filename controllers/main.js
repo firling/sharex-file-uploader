@@ -28,6 +28,13 @@ const deleteFile = (req, res) => {
     });
 }
 
+const uploadFile = (req, res) => {
+    if (!req.filename) {
+        return res.status(400).json({ success: false, error: 'No file uploaded' });
+    }
+    return res.status(200).json({ success: true, filename: req.filename });
+}
+
 module.exports = {
-    postFile, getAllFile, deleteFile
+    postFile, getAllFile, deleteFile, uploadFile
 }

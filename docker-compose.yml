@@ -13,6 +13,7 @@ services:
       - PORT=80
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=traefik-net"
 
       - "traefik.http.services.sharex.loadbalancer.server.port=80"
 

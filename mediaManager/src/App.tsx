@@ -32,7 +32,7 @@ function App() {
 
   useEffect(() => {
     if (!token) return;
-    authFetch(`${import.meta.env.VITE_BASE_URL}/api/getAllFile`)
+    authFetch(`${import.meta.env.VITE_BASE_URL || ''}/api/getAllFile`)
       .then((res) => res.json())
       .then((data) => setFiles(data.files))
       .catch(() => {});
@@ -45,7 +45,7 @@ function App() {
 
   const onDelete = (file: string) => {
     setFiles(files.filter((f) => f !== file));
-    authFetch(`${import.meta.env.VITE_BASE_URL}/api/deleteFile/${file}`, { method: 'DELETE' });
+    authFetch(`${import.meta.env.VITE_BASE_URL || ''}/api/deleteFile/${file}`, { method: 'DELETE' });
   };
 
   const onUpload = (filename: string) => {

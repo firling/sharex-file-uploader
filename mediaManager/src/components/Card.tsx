@@ -11,7 +11,7 @@ interface CardProps {
 }
 
 const Card = ({file, onDelete}: CardProps) => {
-    const url = `${import.meta.env.VITE_BASE_URL}/static/${file}`
+    const url = `${import.meta.env.VITE_BASE_URL || ''}/static/${file}`
 
     const isImage = (ext: string | undefined) => {
         const images = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'apng', 'avif', 'webp', 'bmp', 'ico', 'cur', 'tif', 'tiff']

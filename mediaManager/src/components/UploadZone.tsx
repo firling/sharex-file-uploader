@@ -21,7 +21,7 @@ const UploadZone = ({ token, onUpload }: UploadZoneProps) => {
                 const formData = new FormData();
                 formData.append('file', file);
 
-                const res = await fetch(`${import.meta.env.VITE_BASE_URL}/api/uploadFile`, {
+                const res = await fetch(`${import.meta.env.VITE_BASE_URL || ''}/api/uploadFile`, {
                     method: 'POST',
                     headers: { Authorization: `Bearer ${token}` },
                     body: formData,

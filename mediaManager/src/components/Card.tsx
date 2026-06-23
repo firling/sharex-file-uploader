@@ -119,9 +119,9 @@ const Card = ({file, onDelete}: CardProps) => {
                     flex: '1 1 auto',
                     display: 'flex',
                     justifyContent: 'center',
-                    alignItems: 'center',
+                    alignItems: type === 'markdown' ? 'stretch' : 'center',
                     cursor: 'pointer',
-                    minHeight: type === 'html' || type === 'markdown' ? 180 : undefined,
+                    height: type === 'html' || type === 'markdown' ? 180 : undefined,
                     overflow: 'hidden',
                 }}
                 onClick={() => window.open(openUrl)}

@@ -1,11 +1,11 @@
 FROM node:alpine
 
-WORKDIR /app 
-COPY . . 
-RUN yarn 
+WORKDIR /app
+COPY . .
+RUN npm install
 
 WORKDIR /app/mediaManager
-RUN yarn build
+RUN npm run build
 
 WORKDIR /app
 CMD ["node", "index.js"]

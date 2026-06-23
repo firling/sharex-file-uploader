@@ -1,5 +1,6 @@
-import {Paper, Text, ActionIcon} from '@mantine/core';
-import { IconTrash, IconFileFilled } from '@tabler/icons-react';
+import {Paper, Text, ActionIcon, Tooltip, Group} from '@mantine/core';
+import { useClipboard } from '@mantine/hooks';
+import { IconTrash, IconFileFilled, IconLink, IconCheck } from '@tabler/icons-react';
 // @ts-ignore
 import VideoThumbnail from 'react-video-thumbnail';
 // @ts-ignore
@@ -12,6 +13,8 @@ interface CardProps {
 
 const Card = ({file, onDelete}: CardProps) => {
     const url = `${import.meta.env.VITE_BASE_URL || ''}/static/${file}`
+    const shareUrl = new URL(url, window.location.origin).href
+    const clipboard = useClipboard({ timeout: 1500 })
 
     const isImage = (ext: string | undefined) => {
         const images = ['jpg', 'jpeg', 'png', 'gif', 'svg', 'apng', 'avif', 'webp', 'bmp', 'ico', 'cur', 'tif', 'tiff']
@@ -23,14 +26,51 @@ const Card = ({file, onDelete}: CardProps) => {
         return videos.includes(ext!)
     }
 
+    const isHtml = (ext: string | undefined) => {
+        const html = ['html', 'htm']
+        return html.includes(ext!)
+    }
+
     const getType = (file: string) => {
-        const ext = file.split('.').pop()
+        const ext = file.split('.').pop()?.toLowerCase()
         if (isImage(ext)) return 'image'
         if (isVideo(ext)) return 'video'
+        if (isHtml(ext)) return 'html'
         return 'other'
     }
 
-    return ( 
+    const type = getType(file)
+
+    const preview = () => {
+        if (type === 'image') {
+            return <LazyLoadImage alt={file} effect="blur" src={url} />
+        }
+        if (type === 'video') {
+            return <VideoThumbnail videoUrl={url} />
+        }
+        if (type === 'html') {
+            // Sandboxed (no allow-scripts): the preview cannot run the uploaded
+            // page's JS, so it can't reach the manager's localStorage token.
+            return (
+                <iframe
+                    src={url}
+                    title={file}
+                    sandbox=""
+                    scrolling="no"
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        border: 0,
+                        pointerEvents: 'none',
+                        background: '#fff',
+                    }}
+                />
+            )
+        }
+        return <IconFileFilled size="5rem" />
+    }
+
+    return (
         <Paper withBorder p="md" sx={{
             display: 'flex',
             flexDirection: 'column',
@@ -39,33 +79,41 @@ const Card = ({file, onDelete}: CardProps) => {
                 style={{
                     display: 'flex',
                     justifyContent: 'space-between',
+                    alignItems: 'center',
                 }}
             >
-                <Text>{file}</Text>
-                <ActionIcon onClick={() => onDelete(file)} color="red" size="lg">
-                    <IconTrash size="1.625rem" />
-                </ActionIcon>
+                <Text truncate>{file}</Text>
+                <Group spacing="xs" noWrap>
+                    <Tooltip label={clipboard.copied ? 'Lien copié' : 'Copier le lien'} withArrow>
+                        <ActionIcon
+                            onClick={() => clipboard.copy(shareUrl)}
+                            color={clipboard.copied ? 'teal' : 'blue'}
+                            size="lg"
+                        >
+                            {clipboard.copied ? <IconCheck size="1.5rem" /> : <IconLink size="1.5rem" />}
+                        </ActionIcon>
+                    </Tooltip>
+                    <ActionIcon onClick={() => onDelete(file)} color="red" size="lg">
+                        <IconTrash size="1.625rem" />
+                    </ActionIcon>
+                </Group>
             </div>
-            <div 
+            <div
                 style={{
                     flex: '1 1 auto',
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
                     cursor: 'pointer',
+                    minHeight: type === 'html' ? 180 : undefined,
+                    overflow: 'hidden',
                 }}
                 onClick={() => window.open(url)}
             >
-                {getType(file) === 'image' ? 
-                    <LazyLoadImage
-                        alt={file}
-                        effect="blur"
-                        src={url} 
-                    />
-                : getType(file) === 'video' ? <VideoThumbnail videoUrl={url} /> : <IconFileFilled size="5rem" />}
+                {preview()}
             </div>
         </Paper>
     );
 }
- 
+
 export default Card;

@@ -11,8 +11,10 @@ app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(cors());
 
 const mainRouter = require('./routes/main');
+const { viewFile } = require('./controllers/main');
 
 app.use('/api', mainRouter);
+app.get('/view/:filename', viewFile);
 app.use('/static', express.static(__dirname + "/files"));
 
 app.use('/assets', express.static(__dirname + "/mediaManager/dist/assets"))

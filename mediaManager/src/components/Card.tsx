@@ -14,7 +14,6 @@ interface CardProps {
 
 const Card = ({file, onDelete}: CardProps) => {
     const url = `${import.meta.env.VITE_BASE_URL || ''}/static/${file}`
-    const shareUrl = new URL(url, window.location.origin).href
     const clipboard = useClipboard({ timeout: 1500 })
 
     const isImage = (ext: string | undefined) => {
@@ -47,6 +46,13 @@ const Card = ({file, onDelete}: CardProps) => {
     }
 
     const type = getType(file)
+
+    // Markdown is shared/opened through /view (server-rendered HTML) instead of
+    // the raw /static file, so the link renders formatted in a browser.
+    const openUrl = type === 'markdown'
+        ? `${import.meta.env.VITE_BASE_URL || ''}/view/${file}`
+        : url
+    const shareUrl = new URL(openUrl, window.location.origin).href
 
     const preview = () => {
         if (type === 'image') {
@@ -118,7 +124,7 @@ const Card = ({file, onDelete}: CardProps) => {
                     minHeight: type === 'html' || type === 'markdown' ? 180 : undefined,
                     overflow: 'hidden',
                 }}
-                onClick={() => window.open(url)}
+                onClick={() => window.open(openUrl)}
             >
                 {preview()}
             </div>

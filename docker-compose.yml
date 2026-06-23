@@ -1,4 +1,3 @@
-version: "3.8"
 services:
 
   sharex:
@@ -9,6 +8,8 @@ services:
       - ./files:/app/files
     networks:
       - traefik-net
+    env_file:
+      - .env
     environment:
       - PORT=80
     labels:

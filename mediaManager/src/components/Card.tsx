@@ -5,6 +5,7 @@ import { IconTrash, IconFileFilled, IconLink, IconCheck } from '@tabler/icons-re
 import VideoThumbnail from 'react-video-thumbnail';
 // @ts-ignore
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import MarkdownPreview from './MarkdownPreview';
 
 interface CardProps {
     file: string,
@@ -31,11 +32,17 @@ const Card = ({file, onDelete}: CardProps) => {
         return html.includes(ext!)
     }
 
+    const isMarkdown = (ext: string | undefined) => {
+        const markdown = ['md', 'markdown']
+        return markdown.includes(ext!)
+    }
+
     const getType = (file: string) => {
         const ext = file.split('.').pop()?.toLowerCase()
         if (isImage(ext)) return 'image'
         if (isVideo(ext)) return 'video'
         if (isHtml(ext)) return 'html'
+        if (isMarkdown(ext)) return 'markdown'
         return 'other'
     }
 
@@ -47,6 +54,9 @@ const Card = ({file, onDelete}: CardProps) => {
         }
         if (type === 'video') {
             return <VideoThumbnail videoUrl={url} />
+        }
+        if (type === 'markdown') {
+            return <MarkdownPreview url={url} />
         }
         if (type === 'html') {
             // Sandboxed (no allow-scripts): the preview cannot run the uploaded
@@ -105,7 +115,7 @@ const Card = ({file, onDelete}: CardProps) => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     cursor: 'pointer',
-                    minHeight: type === 'html' ? 180 : undefined,
+                    minHeight: type === 'html' || type === 'markdown' ? 180 : undefined,
                     overflow: 'hidden',
                 }}
                 onClick={() => window.open(url)}

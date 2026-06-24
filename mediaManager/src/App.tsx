@@ -4,6 +4,7 @@ import './App.css'
 import Card from './components/Card'
 import LoginForm from './components/LoginForm'
 import UploadZone from './components/UploadZone'
+import PasteText from './components/PasteText'
 
 function App() {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('token'));
@@ -64,6 +65,7 @@ function App() {
         </Button>
       </Group>
       <UploadZone token={token} onUpload={onUpload} />
+      <PasteText token={token} onUpload={onUpload} />
       <SimpleGrid
         cols={4}
         spacing="lg"
